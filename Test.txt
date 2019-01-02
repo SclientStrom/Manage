@@ -1,0 +1,42 @@
+npm i element-ui -S
+
+npm install vuex --save
+
+npm install axios --save-dev
+
+
+      const h = this.$createElement
+      this.$msgbox({
+        title: '消息',
+        message: h('p', null, [
+          h('span', null, '你确定要删除这条记录吗? '),
+          h('i', {style: 'color: teal'}, '')
+        ]),
+        showCancelButton: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'danger',
+        center: true,
+        beforeClose: (action, instance, done) => {
+          if (action === 'confirm') {
+            instance.confirmButtonLoading = true
+            instance.confirmButtonText = '执行中...'
+            this.axios.post('api/account/deletePostByIds', params)
+              .then(response => {
+                this.getAllPost()
+                done()
+                instance.confirmButtonLoading = false
+              })
+              .catch(error => {
+                console.log(error)
+              })
+          } else {
+            done()
+          }
+        }
+      }).then(action => {
+        this.$message({
+          type: 'success',
+          message: '删除成功'
+        })
+      })
